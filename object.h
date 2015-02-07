@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <SDL2/SDL.h>
+#include "messages.h"
 
 class World;
 class InputComponent;
@@ -21,10 +22,12 @@ public:
   Object(InputComponent* input,
          PhysicsComponent* physics,
          GraphicsComponent* graphics)
-    :input_(input), physics_(physics), graphics_(graphics){}
+    :input_(input), physics_(physics), graphics_(graphics)
+  {}
 
   void update(World& world);
   void draw(SDL_Renderer* renderer, double interp);
+  void send(message msg);
   
 };
 

@@ -19,19 +19,21 @@ bool PlayerPhysicsComponent
 
 void PlayerPhysicsComponent
 ::update(Object& obj, World& world){
-  //Gravity
+  // Gravity
   obj.yspeed+=0.65;
   obj.yspeed*=0.99;
   
-  if(obj.x+obj.w+obj.xspeed > SCREEN_WIDTH){
+  if(obj.x+obj.xspeed > SCREEN_WIDTH){
     obj.x = 0;
   }
-  else if(obj.x+obj.xspeed < 0){
+  else if(obj.x+obj.w+obj.xspeed < 0){
     obj.x = SCREEN_WIDTH-obj.w;
   }
 
-  if(checkCollisions(obj, world.get_platforms()))
+  if(checkCollisions(obj, world.get_platforms())){
     obj.yspeed = -22;
+    obj.send(PLAYER_JUMP);
+  }
 
   obj.xspeed*=0.93;
   obj.x+=obj.xspeed;
@@ -46,28 +48,30 @@ void PlayerPhysicsComponent
   }
 }
 
+/** @brief Ensures minimum distance between platforms */
 void PlatformPhysicsComponent
 ::checkDistances(Object* platform, std::vector<Object*> &platforms){
-  /* Minimum distance between platforms */
   for(unsigned int i = 1; i < platforms.size(); i++)
     if(platform != platforms[i])
-      while(abs(platform->y-platforms[i]->y)<=50)
-        platform->y--;
+      while(abs(platform->y-platforms[i]->y)<=50){
+          platform->y++;
+      }
 }
 
 void PlatformPhysicsComponent
 ::update(Object& obj, World& world){
-  // checkDistances(&obj, world.get_platforms());
+  checkDistances(&obj, world.get_platforms());
 
   Object* player = world.get_player();
   if(scroll && player->yspeed < 0) obj.yspeed = -player->yspeed;
+
   if(obj.y+obj.yspeed > SCREEN_HEIGHT){
     obj.y = -obj.h-rand() % 100;
     obj.x = rand()%SCREEN_WIDTH;
   }
 
   if(obj.x+obj.w+obj.xspeed > SCREEN_WIDTH) obj.x = SCREEN_WIDTH-obj.w;
-  else if(obj.x+obj.w+obj.xspeed < 0) obj.x = 0;
+  else if(obj.x+obj.xspeed < 0) obj.x = 0;
   
   obj.x+=obj.xspeed;
   obj.y+=obj.yspeed;

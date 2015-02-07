@@ -36,11 +36,15 @@ bool Game::init(){
   this->world = game_world;
 
   // Player
-  Object* pl = new Object(new PlayerInputComponent(&moveright, &moveleft),
+  // Object* pl = new Object(new PlayerInputComponent(&moveright, &moveleft),
+  //                         new PlayerPhysicsComponent(),
+  //                         new GeneralGraphicsComponent(255,255,255,255));
+  Object* pl = new Object(new DemoInputComponent(),
                           new PlayerPhysicsComponent(),
                           new GeneralGraphicsComponent(255,255,255,255));
   pl->w=20;
   pl->h=40;
+  pl->x = SCREEN_WIDTH/2-pl->w/2;
   pl->y = SCREEN_HEIGHT-pl->h-15;
   pl->yspeed = -22;
   world->change_player(pl);
@@ -52,13 +56,11 @@ bool Game::init(){
                               new GeneralGraphicsComponent(100,190,230,255));
     plat->w = 70;
     plat->h = 15;
-    short x;
-    if(i==0) x = SCREEN_WIDTH/2-plat->w/2;
-    x = rand()%SCREEN_WIDTH-plat->w;
 
-    short y = SCREEN_HEIGHT-(i*100);
-    plat->x = x;
-    plat->y = y;
+    if(i==0) plat->x = SCREEN_WIDTH/2-plat->w/2;
+    else plat->x = rand()%SCREEN_WIDTH-plat->w;
+
+    plat->y = SCREEN_HEIGHT-(i*100);
     
     world->add_platform(plat); /* Add platform to the world */
   }

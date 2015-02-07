@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <algorithm>
 #include "globals.h"
+#include "messages.h"
 
 class Object;
 
@@ -11,7 +12,9 @@ class GraphicsComponent{
 public:
   virtual ~GraphicsComponent(){}
   virtual void update(Object& obj, SDL_Renderer* renderer, double interp)=0;
+  virtual void receive(message msg){}
 };
+
 
 class GeneralGraphicsComponent : public GraphicsComponent{
   int r,g,b,a;

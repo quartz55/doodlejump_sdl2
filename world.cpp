@@ -8,7 +8,10 @@ void World::update(){
 }
 
 void World::draw(SDL_Renderer* renderer, double interp){
-  player->draw(renderer, interp);
+  /* Render platforms first */
   for(unsigned int i = 0; i < platforms.size(); i++)
     platforms[i]->draw(renderer, interp);
+
+  /* Render players last */
+  player->draw(renderer, interp);
 }
